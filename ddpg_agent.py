@@ -18,7 +18,7 @@ LR_CRITIC = 1e-3        # learning rate of the critic
 WEIGHT_DECAY = 0        # L2 weight decay
 
 UPDATE_EVERY_TIMESTAPES = 1
-UPDATE_TIMES = 1
+UPDATE_TIMES = 5
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 

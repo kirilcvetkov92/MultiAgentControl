@@ -87,7 +87,7 @@ def play(num_agents=20):
                   random_seed=0)
     play_env(environment, agent)
 
-def ddpg(agent, environment,  num_agents, n_episodes=1000, max_t=1000, print_every=100, goal=30):
+def ddpg(agent, environment,  num_agents, n_episodes=1000, max_t=1000, print_every=100, goal=0.5):
     scores_window = deque(maxlen=100)
     scores_episode = []
 
@@ -122,8 +122,8 @@ def ddpg(agent, environment,  num_agents, n_episodes=1000, max_t=1000, print_eve
               end="\n")
         if i_episode % 100 == 0:
             print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)))
-        if np.mean(scores_window) >= 30.0:
-            print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode - 100,
+        if np.mean(scores_window) >= goal:
+            print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode,
                                                                                          np.mean(scores_window)))
             torch.save(agent.actor_local.state_dict(), 'checkpoint_actor.pth')
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic.pth')
@@ -144,7 +144,7 @@ def train(num_agents=2):
                       action_size=action_size,
                       random_seed=0)
 
-    scores, scores_window = ddpg(agent, environment, num_agents, n_episodes=1000)
+    scores, scores_window = ddpg(agent, environment, num_agents, n_episodes=5000)
 
     np.save('ddpg' + '_scores_new.npy', np.array(scores))
     np.save('ddpg' + '_scores_window.npy', np.array(scores_window))
