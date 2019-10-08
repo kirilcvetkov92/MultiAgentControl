@@ -36,11 +36,12 @@ To train the agent run python Navigation.py
 
 ## Implementation details
 
-This problem was solved with DDPQ Neural network 
+This problem was solved with DDPQ (deep deterministic plicy gradient) reinforcement learning approach based on my previous implementation for solving continious control environment.
 
-I choose the '20 agents' environment because we can collect more data in order to provide more accurate and better-quality result.
+**Changes** :
+* The critic models learns Q-values from combined states and separate actions from all the agents.
+* The actor models get the best action, when combined states is served as input from all the agents.
 
-DDPQ (deep deterministic plicy gradient) reinforcement learning approach was chosen to sole this task.
 
 The DDPQ network model consists od 2 parts:
 
@@ -54,7 +55,9 @@ The DDPQ network model consists od 2 parts:
   The 'goal' of this network is to find the correspodning action, when a state is given.
   this neural network favorize the action which maximize the Q value as otuput by the critic network.
   Since this is a problem maximization of the Q-value, the optimization problem will be gradiend ascent.
-  Since the action is continious, the input state vector is 33 dimensional, I needed to create neural networks with bigger 
+  Since the action is continious, the input state vector is 24 dimensional for each agent, in this case (24,2) where the 
+  second dimension represent the number of agents.
+  I needed to create neural networks with bigger 
   hidden size inside the layers.
   A 2-layer fully connected dense with 256 neurons on the first layer and 128 neurons on second layer was chosen.
   The actions were clipped in range of (-1, 1) and tanh activation fucntion was used in the last layer.
@@ -103,5 +106,5 @@ Here is a summary of the hyper parameters used:
     <img src="documentation/Scores.png" />
 </p>
 
-* Environment solved in 105 episodes
+* Environment solved in 367 episodes
 
