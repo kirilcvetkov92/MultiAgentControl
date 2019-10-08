@@ -86,7 +86,6 @@ Here I also found that using ELU insteaed of RELU layers provides more stable tr
 Gradient clipping was applied for the critic neural network, to provide more stable performance.
 
 
-
 Here is a summary of the hyper parameters used:
 
 <table width=600>
@@ -103,7 +102,6 @@ Here is a summary of the hyper parameters used:
 </table>
 
 
-
 ##### Plot of Rewards
 
 <p align="center">
@@ -112,3 +110,9 @@ Here is a summary of the hyper parameters used:
 
 * Environment solved in 367 episodes
 
+## Ideas for improvements
+
+* I would like to try the same idea on other approaches for solving this problem like [PPO](https://arxiv.org/pdf/1707.06347.pdf), [A3C](https://arxiv.org/pdf/1602.01783.pdf), and [D4PG](https://openreview.net/pdf?id=SyZipzbCb) that use multiple (non-interacting, parallel) copies of the same agent to distribute the task of gathering experience.
+* Would like to play with some small changes : for example creating neural network for each agent, where the weights will be independed.
+* Stabilizing the exploration-exploitation trade-off by implementing a decay for the sigma parameter of the Ornstein-Uhlenbeck noise process.
+* Use Priority experience replay from my first project 
