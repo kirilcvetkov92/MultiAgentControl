@@ -1,4 +1,4 @@
-# Project 2L Continuous Control
+# Project 3: Collaboration and Competition
 
 ### Project details
 
