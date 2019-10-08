@@ -55,7 +55,7 @@ My approach is very similar to MADDPG, with a slidght difference, where in this 
 * The actor models get the best action, when combined states is served as input from all the agents.
 * Computing Q_targets now assume the max reward from all of the agents, and assumes that state is done if one of the agents is done in the episode.
 * The final state vector is transformed from (1,24,NUM_AGENTS) to (1,24*NUM_AGENTS)
-* The final action vector is transformed form (1,4) to (1,2,2)
+* The final action vector is transformed form (1,4) to (1,2) and (1,2) for both agents since NUM_AGENTS=2
 * The neural network inputs are scaled based on number of agents respectivly.
 
 The DDPQ network model consists od 2 parts:
