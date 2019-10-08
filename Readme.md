@@ -37,6 +37,7 @@ To train the agent run python Navigation.py
 ## Implementation details
 
 This problem was solved with DDPQ (deep deterministic plicy gradient) reinforcement learning approach based on my previous implementation for solving continious control environment.
+My approach is very similar to MADDPG, with a slidght difference, where in this case, the agents share the same weights for both actor and critic neural networks. 
 
 **Changes** :
 * The critic models learns Q-values from combined states and separate actions from all the agents.
