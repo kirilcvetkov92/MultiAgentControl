@@ -26,7 +26,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, random_seed):
+    def __init__(self, state_size, action_size, random_seed, num_agents):
         """Initialize an Agent object.
 
         Params
@@ -40,6 +40,7 @@ class Agent():
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(random_seed)
+        self.num_agents = num_agents
 
         # Actor Network (w/ Target Network)
         self.actor_local = Actor(state_size, action_size, random_seed).to(device)
@@ -47,8 +48,8 @@ class Agent():
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(), lr=LR_ACTOR)
 
         # Critic Network (w/ Target Network)
-        self.critic_local = Critic(state_size*2, action_size*2, random_seed).to(device)
-        self.critic_target = Critic(state_size*2, action_size*2, random_seed).to(device)
+        self.critic_local = Critic(state_size*self.num_agents, action_size*self.num_agents, random_seed).to(device)
+        self.critic_target = Critic(state_size*self.num_agents, action_size*self.num_agents, random_seed).to(device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
 
         # Noise process
@@ -105,7 +106,7 @@ class Agent():
         actions = actions.view(BATCH_SIZE, -1)
 
         with torch.no_grad():
-            actions_next = [self.actor_target(next_states[:, i, :]) for i in range(2)]
+            actions_next = [self.actor_target(next_states[:, i, :]) for i in range(self.num_agents)]
 
         actions_next = torch.cat(actions_next, axis=-1)
 
@@ -134,7 +135,7 @@ class Agent():
 
         # ---------------------------- update actor ---------------------------- #
         # Compute actor loss
-        actions_pred = [self.actor_local(states[:, i, :]) for i in range(2)]
+        actions_pred = [self.actor_local(states[:, i, :]) for i in range(self.num_agents)]
         actions_pred = torch.cat(actions_pred, dim=1)
 
         actor_loss = -self.critic_local(full_state, actions_pred).mean()

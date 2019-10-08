@@ -14,12 +14,11 @@ class Environemnt:
         self.brain_name = self.env.brain_names[0]
         self.brain = self.env.brains[self.brain_name]
         self.env_info = self.env.reset(train_mode=True)[self.brain_name]
+        self.agents = self.env_info.agents
         self.train_mode = train_mode
-    def get_agents(self):
-        agents = self.env_info.agents
-        return agents
 
-    def get_number_of_atents(self):
+
+    def get_number_of_agents(self):
         return  len(self.agents)
 
     def get_number_of_actions(self):
@@ -46,7 +45,7 @@ class Environemnt:
     def close(self):
         self.env.close()
 
-def play_env(env, agent, trials=300, max_t=1000, num_agents=20):
+def play_env(env, agent, num_agents=2, trials=300, max_t=1000):
     agent.actor_local.load_state_dict(torch.load('checkpoint_actor.pth'))
     agent.critic_local.load_state_dict(torch.load('checkpoint_critic.pth'))
 
@@ -59,7 +58,7 @@ def play_env(env, agent, trials=300, max_t=1000, num_agents=20):
         scores = np.zeros(num_agents)
 
         for j in range(max_t):
-            actions = np.array([agent.act(state[i]) for i in range(num_agents)])
+            actions = agent.act(state)
             env_info = env.make_action(actions)
             next_state = env_info.vector_observations
             reward = env_info.rewards
@@ -75,17 +74,20 @@ def play_env(env, agent, trials=300, max_t=1000, num_agents=20):
     env.close()
 
 
-def play(num_agents=20):
-    environment = Environemnt(env_path="envs/2/Reacher_Windows_x86_64/Reacher.exe",
+def play():
+    environment = Environemnt(env_path="envs/3/Tennis.exe",
                               train_mode=False)
+
+    num_agents = environment.get_number_of_agents()
     state_size = len(environment.get_current_state()[0])
     action_size = environment.get_number_of_actions()
 
 
     agent = Agent(state_size=state_size,
                   action_size=action_size,
-                  random_seed=0)
-    play_env(environment, agent)
+                  random_seed=0,
+                  num_agents = num_agents)
+    play_env(environment, agent, num_agents)
 
 def ddpg(agent, environment,  num_agents, n_episodes=1000, max_t=1000, print_every=100, goal=0.5):
     scores_window = deque(maxlen=100)
@@ -131,9 +133,11 @@ def ddpg(agent, environment,  num_agents, n_episodes=1000, max_t=1000, print_eve
 
     return scores_episode, scores_window
 
-def train(num_agents=2):
+def train():
 
     environment = Environemnt(env_path="envs/3/Tennis.exe")
+
+    num_agents = environment.get_number_of_agents()
     state_size = len(environment.get_current_state()[0])
     action_size = environment.get_number_of_actions()
 
@@ -141,8 +145,10 @@ def train(num_agents=2):
 
 
     agent = Agent(state_size=state_size,
-                      action_size=action_size,
-                      random_seed=0)
+                  action_size=action_size,
+                  random_seed=0,
+                  num_agents = num_agents
+                )
 
     scores, scores_window = ddpg(agent, environment, num_agents, n_episodes=5000)
 
