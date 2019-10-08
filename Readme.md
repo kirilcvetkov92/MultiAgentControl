@@ -41,7 +41,10 @@ This problem was solved with DDPQ (deep deterministic plicy gradient) reinforcem
 **Changes** :
 * The critic models learns Q-values from combined states and separate actions from all the agents.
 * The actor models get the best action, when combined states is served as input from all the agents.
-
+* Computing Q_targets now assume the max reward from all of the agents, and assumes that state is done if one of the agents is done in the episode.
+* The final state vector is transformed from (1,24,NUM_AGENTS) to (1,24*NUM_AGENTS)
+* The final action vector is transformed form (1,2,NUM_AGENTS) to (1,2*NUM_AGENTS)
+* The neural network inputs are scaled based on number of agents respectivly.
 
 The DDPQ network model consists od 2 parts:
 
@@ -56,7 +59,7 @@ The DDPQ network model consists od 2 parts:
   this neural network favorize the action which maximize the Q value as otuput by the critic network.
   Since this is a problem maximization of the Q-value, the optimization problem will be gradiend ascent.
   Since the action is continious, the input state vector is 24 dimensional for each agent, in this case (24,2) where the 
-  second dimension represent the number of agents.
+  second dimension represent the number of agents. Combining the state vector we get 48 dimensional input vector.
   I needed to create neural networks with bigger 
   hidden size inside the layers.
   A 2-layer fully connected dense with 256 neurons on the first layer and 128 neurons on second layer was chosen.
@@ -90,8 +93,8 @@ Here is a summary of the hyper parameters used:
 <tr><td>L2 Weight Decay  </td><td>  0    </td></tr>
 <tr><td>Gamma  </td><td> 0.99    </td></tr>               
 <tr><td>Tau (soft update)  </td><td> 1e-3          </td></tr>           
-<tr><td>Learning Rate Actor </td><td>  1e-4  </td></tr>
-<tr><td>Learning Rate Critic  </td><td>  1e-4  </td></tr>
+<tr><td>Learning Rate Actor </td><td>  1e-3  </td></tr>
+<tr><td>Learning Rate Critic  </td><td>  1e-3  </td></tr>
 <tr><td>Learning network frequency </td><td> 20    </td></tr>
 <tr><td>Learning times per step  </td><td> 10    </td></tr>
 <tr><td> Sigma </td><td> 0.1   </td></tr>
