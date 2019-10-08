@@ -106,8 +106,8 @@ Here is a summary of the hyper parameters used:
 <tr><td>Tau (soft update)  </td><td> 1e-3          </td></tr>           
 <tr><td>Learning Rate Actor </td><td>  1e-3  </td></tr>
 <tr><td>Learning Rate Critic  </td><td>  1e-3  </td></tr>
-<tr><td>Learning network frequency </td><td> 20    </td></tr>
-<tr><td>Learning times per step  </td><td> 10    </td></tr>
+<tr><td>Learning network frequency </td><td> 1    </td></tr>
+<tr><td>Learning times per step  </td><td> 5    </td></tr>
 <tr><td> Sigma </td><td> 0.1   </td></tr>
 
 </table>
